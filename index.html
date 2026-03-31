@@ -274,6 +274,11 @@ ORDER BY semana DESC, orders DESC</pre>
 </div>
 
 <script>
+    const PASSWORD = "pricing2026";
+const entered = prompt("🔒 BQ Assistant — Ingresá la contraseña:");
+if (entered !== PASSWORD) {
+  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Nunito,sans-serif;color:#FA0050;font-size:18px;font-weight:700;">Acceso denegado ❌</div>';
+}
 const QUERIES = {
   "Conversión por TOD y ciudad en Colombia últimos 30 días, separando plus de no plus": `SELECT
   dps.city_name                                           AS city,
