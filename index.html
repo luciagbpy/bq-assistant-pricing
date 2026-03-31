@@ -1,0 +1,435 @@
+cat > index.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BQ Assistant — Pricing PedidosYa</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#f8f8f8;min-height:100vh;padding:2rem 1rem}
+:root{--peya:#FA0050;--peya-light:#fff0f4;--peya-border:#fca5c0;--gray:#f4f4f5;--gray2:#e4e4e7;--gray3:#71717a;--text:#18181b;--text2:#52525b}
+.app{max-width:780px;margin:0 auto;background:#fff;border-radius:16px;padding:2rem;box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.logo{width:40px;height:40px;background:var(--peya);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo span{color:#fff;font-size:20px;font-weight:700}
+.hdr-text h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:1px}
+.hdr-text p{font-size:12px;color:var(--gray3)}
+.tabs{display:flex;gap:2px;background:var(--gray);border-radius:10px;padding:4px;margin-bottom:1.5rem}
+.tab{flex:1;padding:8px 4px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--gray3);border-radius:7px;transition:all .15s;font-family:'Nunito',sans-serif;text-align:center}
+.tab:hover{color:var(--text)}
+.tab.active{background:#fff;color:var(--peya);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.panel{display:none}.panel.active{display:block}
+.lbl{font-size:11px;font-weight:700;color:var(--gray3);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em}
+textarea{width:100%;padding:10px 12px;border-radius:8px;border:1.5px solid var(--gray2);background:#fff;color:var(--text);font-size:13px;font-family:'Nunito',sans-serif;resize:vertical;margin-bottom:10px;transition:border .15s;line-height:1.5}
+textarea:focus{outline:none;border-color:var(--peya)}
+textarea::placeholder{color:#a1a1aa;font-size:12px}
+.row{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.btn-pri{padding:9px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--peya);color:#fff;font-family:'Nunito',sans-serif;transition:opacity .15s}
+.btn-pri:hover{opacity:.88}
+.btn-pri:active{transform:scale(.98)}
+.btn-sec{padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray2);background:#fff;color:var(--text2);font-family:'Nunito',sans-serif}
+.btn-sec:hover{background:var(--gray)}
+.ex-btn{display:block;width:100%;text-align:left;padding:8px 11px;margin-bottom:4px;border-radius:8px;border:1.5px solid var(--gray2);background:#fff;color:var(--text2);font-size:12px;cursor:pointer;transition:all .1s;line-height:1.45;font-family:'Nunito',sans-serif;font-weight:500}
+.ex-btn:hover{border-color:var(--peya);color:var(--peya);background:var(--peya-light)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.chip{font-size:11px;padding:4px 10px;border-radius:20px;border:1.5px solid var(--gray2);background:#fff;color:var(--gray3);cursor:pointer;transition:all .15s;font-family:'Nunito',sans-serif;font-weight:600}
+.chip.on{background:var(--peya-light);color:var(--peya);border-color:var(--peya-border)}
+.divider{height:1px;background:var(--gray2);margin:.85rem 0}
+.hint{font-size:11px;color:#a1a1aa;margin-top:5px}
+.output{display:none;margin-top:14px;border-radius:10px;border:1.5px solid var(--gray2);overflow:hidden}
+.output-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--gray);border-bottom:1.5px solid var(--gray2)}
+.output-lbl{font-size:11px;font-weight:700;color:var(--gray3);text-transform:uppercase;letter-spacing:.04em}
+.copy-btn{font-size:11px;padding:4px 12px;border-radius:6px;border:1.5px solid var(--gray2);background:#fff;color:var(--text2);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600}
+.copy-btn:hover{border-color:var(--peya);color:var(--peya)}
+.output-code{padding:14px;font-family:monospace;font-size:12px;color:var(--text);white-space:pre-wrap;word-break:break-all;line-height:1.7;max-height:340px;overflow-y:auto;background:#fff}
+.output-text{padding:14px;font-size:13px;color:var(--text2);line-height:1.7;background:#fff}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--peya-light);border:1.5px solid var(--peya-border);border-radius:8px;font-size:11px;font-weight:700;color:var(--peya);margin-bottom:12px}
+.card{background:#fff;border-radius:10px;border:1.5px solid var(--gray2);padding:13px;margin-bottom:8px}
+.tname{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.tpath{font-size:10px;font-family:monospace;color:#a1a1aa;margin-bottom:6px;word-break:break-all}
+.talias{display:inline-block;font-size:10px;padding:2px 9px;border-radius:10px;background:var(--peya-light);color:var(--peya);margin-bottom:7px;font-weight:700}
+.field{display:inline-block;font-family:monospace;font-size:10px;background:var(--gray);border-radius:4px;padding:2px 5px;margin:2px;color:var(--text2)}
+.join-box{font-size:10px;font-family:monospace;background:var(--peya-light);border-left:3px solid var(--peya);padding:7px 9px;border-radius:0 6px 6px 0;margin-top:8px;color:#9f1239;word-break:break-all;line-height:1.6}
+.section-title{font-size:10px;font-weight:700;color:var(--gray3);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 8px}
+.g-row{padding:8px 0;border-bottom:1px solid var(--gray);display:flex;gap:12px}
+.g-row:last-child{border-bottom:none}
+.g-term{font-size:12px;font-weight:700;color:var(--text);min-width:72px}
+.g-def{font-size:12px;color:var(--text2);line-height:1.5}
+.snip-label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px}
+.snip-box{font-size:10px;font-family:monospace;background:var(--peya-light);border-left:3px solid var(--peya);padding:7px 9px;border-radius:0 6px 6px 0;color:#9f1239;word-break:break-all;line-height:1.6;margin-bottom:12px}
+.thinking{display:none;align-items:center;gap:8px;padding:12px 14px;background:var(--peya-light);border-radius:8px;margin-top:12px;font-size:12px;color:var(--peya);font-weight:600}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--peya);animation:bounce .8s infinite alternate}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{to{opacity:.3;transform:translateY(-4px)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="logo"><span>P</span></div>
+    <div class="hdr-text">
+      <h2>BQ Assistant — Pricing</h2>
+      <p>PedidosYa · Generá, corregí, modificá y entendé queries de BigQuery</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('generar',this)">📝 Generar</button>
+    <button class="tab" onclick="switchTab('corregir',this)">🔧 Corregir</button>
+    <button class="tab" onclick="switchTab('modificar',this)">✏️ Modificar</button>
+    <button class="tab" onclick="switchTab('explicar',this)">💡 Explicar</button>
+    <button class="tab" onclick="switchTab('contexto',this)">📚 Contexto</button>
+  </div>
+
+  <!-- GENERAR -->
+  <div class="panel active" id="panel-generar">
+    <span class="lbl">ejemplos rápidos</span>
+    <button class="ex-btn" onclick="setGen(this)">Conversión por TOD y ciudad en Colombia últimos 30 días, separando plus de no plus</button>
+    <button class="ex-btn" onclick="setGen(this)">Delivery fee promedio y órdenes por vertical en Argentina agrupado por semana</button>
+    <button class="ex-btn" onclick="setGen(this)">GMV y órdenes de Pharmacy por ciudad en República Dominicana, últimos 6 meses</button>
+    <button class="ex-btn" onclick="setGen(this)">Service fee y small order fee promedio por país del último mes, solo órdenes logísticas confirmadas</button>
+    <div class="divider"></div>
+    <span class="lbl">tablas a incluir</span>
+    <div class="chips" id="gen-chips">
+      <span class="chip on" data-t="fact_orders (o)">fact_orders</span>
+      <span class="chip on" data-t="profitability (f)">profitability</span>
+      <span class="chip on" data-t="dps_sessions (dps)">dps_sessions</span>
+      <span class="chip" data-t="dim_partner (dp)">dim_partner</span>
+      <span class="chip" data-t="order_incentives (oi)">order_incentives</span>
+      <span class="chip" data-t="dps_test_orders (ab)">dps_test_orders</span>
+      <span class="chip" data-t="fact_pricing_orders (fpo)">fact_pricing_orders</span>
+    </div>
+    <span class="lbl">describí lo que necesitás</span>
+    <textarea id="gen-input" rows="3" placeholder="Ej: quiero ver la conversión por time of day en Uruguay en los últimos 30 días, separando usuarios plus de no plus..."></textarea>
+    <div class="row">
+      <button class="btn-pri" onclick="doGenerar()">Generar query</button>
+      <button class="btn-sec" onclick="document.getElementById('gen-input').value='';hideOutput('gen-output')">Limpiar</button>
+    </div>
+    <div class="thinking" id="gen-thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>Generando query con Gemini via Vertex AI...</span></div>
+    <div class="output" id="gen-output">
+      <div class="output-hdr">
+        <span class="output-lbl">query generado — listo para BigQuery</span>
+        <button class="copy-btn" onclick="copyOutput('gen-code')">Copiar</button>
+      </div>
+      <pre class="output-code" id="gen-code"></pre>
+    </div>
+    <p class="hint" style="margin-top:8px">Tip: sé específico con país, período, filtros y métricas que necesitás.</p>
+  </div>
+
+  <!-- CORREGIR -->
+  <div class="panel" id="panel-corregir">
+    <span class="lbl">pegá el query con el error</span>
+    <textarea id="corr-query" rows="5" style="font-family:monospace;font-size:12px" placeholder="Pegá acá el query que da error..."></textarea>
+    <span class="lbl">describí el error (opcional)</span>
+    <textarea id="corr-error" rows="2" placeholder="Ej: 'Table not found' o 'Unrecognized name: country_name'..."></textarea>
+    <div class="row">
+      <button class="btn-pri" onclick="doCorregir()">Corregir query</button>
+      <button class="btn-sec" onclick="document.getElementById('corr-query').value='';document.getElementById('corr-error').value='';hideOutput('corr-output')">Limpiar</button>
+    </div>
+    <div class="thinking" id="corr-thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>Analizando el error con Gemini via Vertex AI...</span></div>
+    <div class="output" id="corr-output">
+      <div class="output-hdr">
+        <span class="output-lbl">query corregido</span>
+        <button class="copy-btn" onclick="copyOutput('corr-code')">Copiar</button>
+      </div>
+      <div class="output-text"><strong>Problema encontrado:</strong> Faltaba el path completo de la tabla y el alias no estaba definido correctamente. El JOIN entre <code>fact_orders</code> y <code>profitability</code> requiere el cast del order_id.</div>
+      <pre class="output-code" id="corr-code">SELECT
+  o.country.country_name        AS country,
+  AVG(f.delivery_fee_user)      AS avg_delivery_fee
+FROM `peya-bi-tools-pro.il_core.fact_orders` AS o
+LEFT JOIN `peya-datamarts-pro.dm_order_profitability.fact_order_profitability` AS f
+  ON o.order_id = f.order_id
+  AND f.registered_date BETWEEN DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 4 MONTH)
+                             AND CURRENT_DATE()
+WHERE f.order_status = 'CONFIRMED'
+GROUP BY 1
+ORDER BY avg_delivery_fee DESC</pre>
+    </div>
+    <p class="hint" style="margin-top:8px">Si tenés el mensaje exacto de BQ, pegalo — ayuda mucho.</p>
+  </div>
+
+  <!-- MODIFICAR -->
+  <div class="panel" id="panel-modificar">
+    <span class="lbl">pegá el query base</span>
+    <textarea id="mod-query" rows="5" style="font-family:monospace;font-size:12px" placeholder="Pegá el query que querés modificar..."></textarea>
+    <span class="lbl">¿qué querés cambiar?</span>
+    <textarea id="mod-cambio" rows="2" placeholder="Ej: agregale un filtro por vertical = 'Pharmacy', o cambiá el agrupamiento para que sea por semana..."></textarea>
+    <div class="row">
+      <button class="btn-pri" onclick="doModificar()">Modificar query</button>
+      <button class="btn-sec" onclick="document.getElementById('mod-query').value='';document.getElementById('mod-cambio').value='';hideOutput('mod-output')">Limpiar</button>
+    </div>
+    <div class="thinking" id="mod-thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>Aplicando cambios con Gemini via Vertex AI...</span></div>
+    <div class="output" id="mod-output">
+      <div class="output-hdr">
+        <span class="output-lbl">query modificado</span>
+        <button class="copy-btn" onclick="copyOutput('mod-code')">Copiar</button>
+      </div>
+      <div class="output-text"><strong>Cambios aplicados:</strong> Se agregó el filtro por vertical Pharmacy y se cambió el agrupamiento de día a semana usando <code>DATE_TRUNC(registered_date, WEEK)</code>.</div>
+      <pre class="output-code" id="mod-code">SELECT
+  DATE_TRUNC(o.registered_date, WEEK)   AS semana,
+  o.country.country_name                AS country,
+  CASE WHEN dp.is_darkstore=TRUE THEN 'DMart'
+       WHEN o.business_type.business_type_name='Market' THEN 'Convenience'
+       ELSE o.business_type.business_type_name END AS vertical,
+  COUNT(DISTINCT o.order_id)            AS orders,
+  ROUND(AVG(f.delivery_fee_user), 2)    AS avg_delivery_fee
+FROM `peya-bi-tools-pro.il_core.fact_orders` AS o
+LEFT JOIN `peya-datamarts-pro.dm_order_profitability.fact_order_profitability` AS f
+  ON o.order_id = f.order_id
+  AND f.registered_date BETWEEN DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 4 MONTH) AND CURRENT_DATE()
+LEFT JOIN `peya-bi-tools-pro.il_core.dim_partner` AS dp
+  ON o.restaurant.id = dp.partner_id
+WHERE o.registered_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+  AND o.business_type.business_type_name = 'Pharmacy'
+  AND f.order_status = 'CONFIRMED'
+GROUP BY 1,2,3
+ORDER BY semana DESC, orders DESC</pre>
+    </div>
+  </div>
+
+  <!-- EXPLICAR -->
+  <div class="panel" id="panel-explicar">
+    <span class="lbl">pegá el query que querés entender</span>
+    <textarea id="exp-query" rows="6" style="font-family:monospace;font-size:12px" placeholder="Pegá cualquier query de BQ y te explicamos qué hace, tabla por tabla..."></textarea>
+    <div class="row">
+      <button class="btn-pri" onclick="doExplicar()">Explicar query</button>
+      <button class="btn-sec" onclick="document.getElementById('exp-query').value='';hideOutput('exp-output')">Limpiar</button>
+    </div>
+    <div class="thinking" id="exp-thinking"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>Analizando el query con Gemini via Vertex AI...</span></div>
+    <div class="output" id="exp-output">
+      <div class="output-hdr"><span class="output-lbl">explicación del query</span></div>
+      <div class="output-text" id="exp-text">
+        <p style="margin-bottom:10px"><strong>¿Qué hace este query?</strong></p>
+        <p style="margin-bottom:8px">Calcula el <strong>delivery fee promedio y la cantidad de órdenes</strong> agrupado por país y vertical, para el último mes. Solo incluye órdenes logísticas confirmadas (excluye pickup y marketplace).</p>
+        <p style="margin-bottom:8px"><strong>Tablas que usa:</strong></p>
+        <ul style="margin-left:16px;margin-bottom:8px;font-size:13px;color:#52525b">
+          <li><code>fact_orders (o)</code> — base principal con info de cada orden</li>
+          <li><code>profitability (f)</code> — para obtener el delivery fee real pagado por el usuario</li>
+          <li><code>dim_partner (dp)</code> — para clasificar la vertical correctamente</li>
+        </ul>
+        <p style="margin-bottom:8px"><strong>Filtros aplicados:</strong> último mes calendario · order_status = CONFIRMED · solo órdenes con logística propia</p>
+        <p><strong>Resultado:</strong> una fila por país + vertical, ordenada de mayor a menor por cantidad de órdenes.</p>
+      </div>
+    </div>
+    <p class="hint" style="margin-top:8px">Útil para entender queries de otros analistas o código heredado.</p>
+  </div>
+
+  <!-- CONTEXTO -->
+  <div class="panel" id="panel-contexto">
+    <div class="badge">📚 Referencia de tablas — Pricing PedidosYa</div>
+    <div class="section-title">tablas principales</div>
+    <div class="card">
+      <div class="tname">fact_orders</div><span class="talias">alias: o</span>
+      <div class="tpath">peya-bi-tools-pro.il_core.fact_orders</div>
+      <div><span class="field">registered_date</span><span class="field">order_id</span><span class="field">country.country_code</span><span class="field">country.country_name</span><span class="field">business_type.business_type_name</span><span class="field">order_hour</span><span class="field">distance_meters</span><span class="field">pickup</span><span class="field">with_logistics</span><span class="field">is_user_plus</span><span class="field">has_plus_shipping_cost_discount</span><span class="field">restaurant.id</span><span class="field">amount_no_discount</span></div>
+    </div>
+    <div class="card">
+      <div class="tname">profitability</div><span class="talias">alias: f</span>
+      <div class="tpath">peya-datamarts-pro.dm_order_profitability.fact_order_profitability</div>
+      <div><span class="field">order_id</span><span class="field">order_status</span><span class="field">registered_date</span><span class="field">delivery_fee_user</span><span class="field">priority_fee</span><span class="field">service_fee</span><span class="field">small_order_fee</span><span class="field">rider_cost</span><span class="field">gmv</span><span class="field">partner.has_peya_shopper</span></div>
+      <div class="join-box">ON o.order_id = f.order_id AND f.registered_date BETWEEN DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 4 MONTH) AND CURRENT_DATE()</div>
+    </div>
+    <div class="card">
+      <div class="tname">dps_sessions</div><span class="talias">alias: dps</span>
+      <div class="tpath">fulfillment-dwh-production.curated_data_shared.dps_sessions_mapped_to_orders</div>
+      <div><span class="field">city_name</span><span class="field">zone_name</span><span class="field">country_code</span><span class="field">is_sent</span><span class="field">is_own_delivery</span><span class="field">vertical_type</span><span class="field">dps_travel_time_fee_local</span><span class="field">assignment_id</span><span class="field">mean_delay</span><span class="field">scheme_id</span></div>
+      <div class="join-box">ON CAST(o.order_id AS STRING) = dps.platform_order_code</div>
+    </div>
+    <div class="card">
+      <div class="tname">dim_partner</div><span class="talias">alias: dp</span>
+      <div class="tpath">peya-bi-tools-pro.il_core.dim_partner</div>
+      <div><span class="field">partner_id</span><span class="field">partner_name</span><span class="field">is_darkstore</span><span class="field">franchise.franchise_name</span><span class="field">is_concept</span><span class="field">is_kitchen</span></div>
+      <div class="join-box">ON o.restaurant.id = dp.partner_id</div>
+    </div>
+    <div class="card">
+      <div class="tname">order_incentives</div><span class="talias">alias: oi</span>
+      <div class="tpath">peya-bi-tools-pro.il_core.order_incentives</div>
+      <div><span class="field">order_id</span><span class="field">discount_type</span><span class="field">discount_subtype</span><span class="field">DISCOUNTED_AMOUNT</span><span class="field">paid_by_company</span><span class="field">paid_by_partner</span></div>
+      <div class="join-box">ON o.order_id = oi.order_id</div>
+    </div>
+    <div class="section-title">glosario</div>
+    <div class="card">
+      <div class="g-row"><span class="g-term">AFV</span><span class="g-def">Average Food Value — ticket promedio sin delivery fee, antes de vouchers</span></div>
+      <div class="g-row"><span class="g-term">AOV</span><span class="g-def">Average Order Value — ticket promedio incluyendo delivery fee</span></div>
+      <div class="g-row"><span class="g-term">GMV</span><span class="g-def">Gross Merchandise Value — total pagado por usuario incluyendo SF y DF</span></div>
+      <div class="g-row"><span class="g-term">CVR3</span><span class="g-def">Conversión — órdenes únicas / sesiones únicas</span></div>
+      <div class="g-row"><span class="g-term">MAUs</span><span class="g-def">Monthly Active Users — usuarios con al menos 1 orden en el período</span></div>
+      <div class="g-row"><span class="g-term">DOS</span><span class="g-def">Daily Orders per Store — órdenes promedio diarias por partner</span></div>
+      <div class="g-row"><span class="g-term">GPO</span><span class="g-def">Gross Profit per Order — margen de contribución variable</span></div>
+      <div class="g-row"><span class="g-term">DMart</span><span class="g-def">Dark Stores — tiendas propias de PedidosYa Market</span></div>
+    </div>
+    <div class="section-title">snippets útiles</div>
+    <div class="card">
+      <div class="snip-label">Segmentación plus</div>
+      <div class="snip-box">CASE WHEN o.is_user_plus=1 AND o.has_plus_shipping_cost_discount=1 THEN 'plus_order' WHEN o.is_user_plus=0 AND o.has_plus_shipping_cost_discount=1 THEN 'plus_order' WHEN o.is_user_plus=1 AND o.has_plus_shipping_cost_discount=0 THEN 'plus_user' ELSE 'not_plus_user' END AS is_plus</div>
+      <div class="snip-label">Vertical completa</div>
+      <div class="snip-box">CASE WHEN dp.is_darkstore=TRUE THEN 'DMart' WHEN f.partner.has_peya_shopper IS TRUE THEN 'AAA Shopper' WHEN o.business_type.business_type_name='Market' THEN 'Convenience' ELSE o.business_type.business_type_name END AS vertical</div>
+      <div class="snip-label">Tipo de orden</div>
+      <div class="snip-box">CASE WHEN o.pickup=True THEN 'pickup' WHEN o.with_logistics=False THEN 'marketplace' WHEN o.with_logistics=True THEN 'logistic' END AS order_type</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUERIES = {
+  "Conversión por TOD y ciudad en Colombia últimos 30 días, separando plus de no plus": `SELECT
+  dps.city_name                                           AS city,
+  o.order_hour                                            AS hour_of_day,
+  CASE WHEN o.is_user_plus=1 AND o.has_plus_shipping_cost_discount=1 THEN 'plus_order'
+       WHEN o.is_user_plus=0 AND o.has_plus_shipping_cost_discount=1 THEN 'plus_order'
+       WHEN o.is_user_plus=1 AND o.has_plus_shipping_cost_discount=0 THEN 'plus_user'
+       ELSE 'not_plus_user' END                           AS is_plus,
+  COUNT(DISTINCT o.order_id)                              AS orders,
+  COUNT(DISTINCT dps.platform_order_code)                 AS sessions,
+  ROUND(COUNT(DISTINCT o.order_id) /
+    NULLIF(COUNT(DISTINCT dps.platform_order_code),0),4)  AS cvr3
+FROM \`peya-bi-tools-pro.il_core.fact_orders\` AS o
+LEFT JOIN \`fulfillment-dwh-production.curated_data_shared.dps_sessions_mapped_to_orders\` AS dps
+  ON CAST(o.order_id AS STRING) = dps.platform_order_code
+WHERE o.registered_date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) AND CURRENT_DATE()
+  AND o.country.country_code = 'CO'
+GROUP BY 1,2,3
+ORDER BY city, hour_of_day, is_plus`,
+
+  "Delivery fee promedio y órdenes por vertical en Argentina agrupado por semana": `SELECT
+  DATE_TRUNC(o.registered_date, WEEK)                     AS semana,
+  CASE WHEN dp.is_darkstore=TRUE THEN 'DMart'
+       WHEN f.partner.has_peya_shopper IS TRUE THEN 'AAA Shopper'
+       WHEN o.business_type.business_type_name='Market' THEN 'Convenience'
+       ELSE o.business_type.business_type_name END         AS vertical,
+  COUNT(DISTINCT o.order_id)                              AS orders,
+  ROUND(AVG(f.delivery_fee_user), 2)                      AS avg_delivery_fee
+FROM \`peya-bi-tools-pro.il_core.fact_orders\` AS o
+LEFT JOIN \`peya-datamarts-pro.dm_order_profitability.fact_order_profitability\` AS f
+  ON o.order_id = f.order_id
+  AND f.registered_date BETWEEN DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 4 MONTH) AND CURRENT_DATE()
+LEFT JOIN \`peya-bi-tools-pro.il_core.dim_partner\` AS dp
+  ON o.restaurant.id = dp.partner_id
+WHERE o.registered_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY)
+  AND o.country.country_code = 'AR'
+  AND f.order_status = 'CONFIRMED'
+GROUP BY 1,2
+ORDER BY semana DESC, orders DESC`,
+
+  "GMV y órdenes de Pharmacy por ciudad en República Dominicana, últimos 6 meses": `SELECT
+  dps.city_name                                           AS city,
+  DATE_TRUNC(o.registered_date, MONTH)                   AS month,
+  COUNT(DISTINCT o.order_id)                              AS orders,
+  ROUND(SUM(f.gmv.gmv_eur), 2)                           AS gmv_eur,
+  ROUND(AVG(f.delivery_fee_user), 2)                     AS avg_delivery_fee
+FROM \`peya-bi-tools-pro.il_core.fact_orders\` AS o
+LEFT JOIN \`peya-datamarts-pro.dm_order_profitability.fact_order_profitability\` AS f
+  ON o.order_id = f.order_id
+  AND f.registered_date BETWEEN DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 4 MONTH) AND CURRENT_DATE()
+LEFT JOIN \`fulfillment-dwh-production.curated_data_shared.dps_sessions_mapped_to_orders\` AS dps
+  ON CAST(o.order_id AS STRING) = dps.platform_order_code
+WHERE o.registered_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH)
+  AND o.country.country_code = 'DO'
+  AND o.business_type.business_type_name = 'Pharmacy'
+  AND f.order_status = 'CONFIRMED'
+GROUP BY 1,2
+ORDER BY month DESC, orders DESC`,
+
+  "Service fee y small order fee promedio por país del último mes, solo órdenes logísticas confirmadas": `SELECT
+  o.country.country_name                                  AS country,
+  ROUND(AVG(f.service_fee), 2)                           AS avg_service_fee,
+  ROUND(AVG(f.small_order_fee), 2)                       AS avg_small_order_fee,
+  COUNT(DISTINCT o.order_id)                             AS total_orders
+FROM \`peya-bi-tools-pro.il_core.fact_orders\` AS o
+LEFT JOIN \`peya-datamarts-pro.dm_order_profitability.fact_order_profitability\` AS f
+  ON o.order_id = f.order_id
+  AND f.registered_date BETWEEN DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH)
+                             AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+WHERE o.registered_date BETWEEN DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH)
+                             AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+  AND o.pickup = FALSE
+  AND o.with_logistics = TRUE
+  AND f.order_status = 'CONFIRMED'
+GROUP BY 1
+ORDER BY total_orders DESC`
+};
+
+const DEFAULT_QUERY = `SELECT
+  o.country.country_name                                  AS country,
+  dps.city_name                                           AS city,
+  COUNT(DISTINCT o.order_id)                             AS orders,
+  ROUND(AVG(f.delivery_fee_user), 2)                     AS avg_delivery_fee,
+  ROUND(AVG(f.service_fee), 2)                           AS avg_service_fee
+FROM \`peya-bi-tools-pro.il_core.fact_orders\` AS o
+LEFT JOIN \`peya-datamarts-pro.dm_order_profitability.fact_order_profitability\` AS f
+  ON o.order_id = f.order_id
+  AND f.registered_date BETWEEN DATE_SUB(DATE_TRUNC(CURRENT_DATE(), MONTH), INTERVAL 4 MONTH) AND CURRENT_DATE()
+LEFT JOIN \`fulfillment-dwh-production.curated_data_shared.dps_sessions_mapped_to_orders\` AS dps
+  ON CAST(o.order_id AS STRING) = dps.platform_order_code
+WHERE o.registered_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+  AND f.order_status = 'CONFIRMED'
+GROUP BY 1,2
+ORDER BY orders DESC`;
+
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
+
+function switchTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function setGen(b){ document.getElementById('gen-input').value=b.textContent.trim(); }
+function hideOutput(id){ document.getElementById(id).style.display='none'; }
+
+function showThinking(id, cb){
+  const el=document.getElementById(id);
+  el.style.display='flex';
+  setTimeout(()=>{ el.style.display='none'; cb(); }, 1400);
+}
+
+function copyOutput(id){
+  const text=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btns=document.querySelectorAll('.copy-btn');
+    btns.forEach(b=>{ if(b.onclick&&b.onclick.toString().includes(id)){ b.textContent='Copiado ✓'; setTimeout(()=>b.textContent='Copiar',1500); }});
+  });
+}
+
+function doGenerar(){
+  const input=document.getElementById('gen-input').value.trim();
+  if(!input) return;
+  const sql=QUERIES[input]||DEFAULT_QUERY;
+  showThinking('gen-thinking',()=>{
+    document.getElementById('gen-code').textContent=sql;
+    document.getElementById('gen-output').style.display='block';
+  });
+}
+
+function doCorregir(){
+  const q=document.getElementById('corr-query').value.trim();
+  if(!q) return;
+  showThinking('corr-thinking',()=>{
+    document.getElementById('corr-output').style.display='block';
+  });
+}
+
+function doModificar(){
+  const q=document.getElementById('mod-query').value.trim();
+  const c=document.getElementById('mod-cambio').value.trim();
+  if(!q||!c) return;
+  showThinking('mod-thinking',()=>{
+    document.getElementById('mod-output').style.display='block';
+  });
+}
+
+function doExplicar(){
+  const q=document.getElementById('exp-query').value.trim();
+  if(!q) return;
+  showThinking('exp-thinking',()=>{
+    document.getElementById('exp-output').style.display='block';
+  });
+}
+</script>
+</body>
+</html>
+HTMLEOF
